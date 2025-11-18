@@ -1,15 +1,16 @@
-package main
+package compact
 
-func compact() {
+func Compact() string {
 	//work within segments rebuild to compact segments top down
 	//update indices
+	return "hi"
 }
 
-func merge() {
+func Merge() {
 	//merge compacted segments
 }
 
-func add_to_memory() {
+func Add_to_memory() {
 	//replace segments with segments_rebuild
 	//replace hashmap with hashmap_rebuild
 }
