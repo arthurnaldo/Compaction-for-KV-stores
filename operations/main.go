@@ -1,6 +1,10 @@
 package main
 
 import (
+	"time"
+
+	"net/http"
+	"operations/compact"
 	"operations/get"
 	"operations/set"
 
@@ -31,12 +35,18 @@ func get_request(c *gin.Context) {
 
 	k := key.(string)
 
-	println(get.Get(k))
+	c.JSON(http.StatusOK, gin.H{"message": get.Get(k)})
 
 }
 
-func main() {
+// runs compact asyncronously every 10 seconds
+func run_compact() {
+	time.Sleep(10000)
+	compact.Compact()
+}
 
+func main() {
+	go run_compact()
 	router := gin.Default()
 	router.GET("/value", get_request)
 	router.POST("keyvalue", set_request)
