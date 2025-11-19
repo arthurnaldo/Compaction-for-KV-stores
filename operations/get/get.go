@@ -1,12 +1,18 @@
 package get
 
-import "os"
+import (
+	"fmt"
+	"operations/hash"
+	"operations/state"
+)
 
-func Get(key string) string {
-	file, err := os.ReadFile("/hashmap/hashmap.yaml")
-	if err != nil {
-		panic(err)
+func Get(key string) (string, error) {
+	index := hash.Hash(key, state.KeyDict.Size)
+	keydict := state.KeyDict
+	for _, entry := range keydict.Buckets[index] {
+		if entry.Key == key {
+			return entry.Value, nil
+		}
 	}
-	println(file)
-	return "memes"
+	return "", fmt.Errorf("key doesn't exist")
 }

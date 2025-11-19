@@ -1,13 +1,13 @@
 package hash
 
-type entry struct {
-	key   int
-	value string
+type Entry struct {
+	Key   string
+	Value string
 }
 
-type hashmap struct {
-	buckets [][]entry
-	size    int
+type Hashmap struct {
+	Buckets [][]Entry
+	Size    int
 }
 
 func Hash(key string, bucketCount int) int {
@@ -23,13 +23,18 @@ func Hash(key string, bucketCount int) int {
 
 }
 
-func CreateHashMap(bucketCount int) *hashmap {
+func AddToHashMap(key string, value string, hashmap *Hashmap, bucketcount int) {
+	bucketIndex := Hash(key, bucketcount)
+	hashmap.Buckets[bucketIndex] = append(hashmap.Buckets[bucketIndex], Entry{key, value})
+}
+
+func CreateHashMap(bucketCount int) *Hashmap {
 	if bucketCount <= 0 {
 		bucketCount = 16
 	}
 
-	return &hashmap{
-		buckets: make([][]entry, bucketCount),
-		size:    0,
+	return &Hashmap{
+		Buckets: make([][]Entry, bucketCount),
+		Size:    0,
 	}
 }
