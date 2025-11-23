@@ -6,7 +6,10 @@ import (
 	"operations/structs"
 )
 
-func Add(key string, value string) bool {
+func Set(key string, value string, delete bool) bool {
+	if delete {
+		value = "TOMBSTONE"
+	}
 	mostRecentSegment := &(*state.Segments)[len(*state.Segments)-1]
 	*mostRecentSegment = append(*mostRecentSegment, structs.Segment{Key: key, Value: value})
 
@@ -18,9 +21,5 @@ func Add(key string, value string) bool {
 		*state.Hashmaps = append(*state.Hashmaps, structs.Hashmap{})
 	}
 
-	return true
-}
-
-func Delete(key string) bool {
 	return true
 }
