@@ -1,14 +1,6 @@
 package hash
 
-type Entry struct {
-	Key   string
-	Value string
-}
-
-type Hashmap struct {
-	Buckets [][]Entry
-	Size    int
-}
+import "operations/structs"
 
 func Hash(key string, bucketCount int) int {
 	var h uint64 = 1469598103934665603
@@ -23,18 +15,39 @@ func Hash(key string, bucketCount int) int {
 
 }
 
-func AddToHashMap(key string, value string, hashmap *Hashmap, bucketcount int) {
-	bucketIndex := Hash(key, bucketcount)
-	hashmap.Buckets[bucketIndex] = append(hashmap.Buckets[bucketIndex], Entry{key, value})
+func GetIndex(key string, hashmap *structs.Hashmap) int {
+	idx := Hash(key, hashmap.Size)
+	for i, entry := range hashmap.Buckets[idx] {
+		if entry.Key == key {
+			return i
+		}
+	}
+	return -1
 }
 
-func CreateHashMap(bucketCount int) *Hashmap {
-	if bucketCount <= 0 {
-		bucketCount = 16
+func AddToHashMap(key string, value string, hashmap *structs.Hashmap) {
+	bucketIndex := Hash(key, hashmap.Size)
+	bucket := hashmap.Buckets[bucketIndex]
+	for i := range bucket {
+		if bucket[i].Key == key {
+			bucket[i].Value = value
+			return
+		}
 	}
-
-	return &Hashmap{
-		Buckets: make([][]Entry, bucketCount),
-		Size:    0,
-	}
+	hashmap.Buckets[bucketIndex] = append(hashmap.Buckets[bucketIndex], structs.Entry{Key: key, Value: value})
 }
+
+func DeleteFromHashMap(key string, hashmap *structs.Hashmap) {
+
+}
+
+// func CreateHashMap(bucketCount int) *Hashmap {
+// 	if bucketCount <= 0 {
+// 		bucketCount = 16
+// 	}
+
+// 	return &Hashmap{
+// 		Buckets: make([][]Entry, bucketCount),
+// 		Size:    0,
+// 	}
+// }

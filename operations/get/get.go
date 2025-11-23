@@ -1,18 +1,23 @@
 package get
 
 import (
-	"fmt"
 	"operations/hash"
 	"operations/state"
+	"operations/structs"
+	"slices"
 )
 
-func Get(key string) (string, error) {
-	index := hash.Hash(key, state.KeyDict.Size)
-	keydict := state.KeyDict
-	for _, entry := range keydict.Buckets[index] {
-		if entry.Key == key {
-			return entry.Value, nil
+func getIndex(key string) (value int, seg *[]structs.Segment) {
+	for i, hashmap := range slices.Backward(*state.Hashmaps) {
+		idx := hash.GetIndex(key, &hashmap)
+		if idx != -1 {
+			return idx, &(*state.Segments)[len(*state.Hashmaps)-1-i]
 		}
 	}
-	return "", fmt.Errorf("key doesn't exist")
+	return -1, nil
+}
+
+func Get(key string) (value string) {
+	index, indices := getIndex(key)
+	return (*indices)[index].Value
 }

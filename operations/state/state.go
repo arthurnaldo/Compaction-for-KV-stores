@@ -1,5 +1,10 @@
 package state
 
-import "operations/hash"
+import (
+	"operations/structs"
+)
 
-var KeyDict *hash.Hashmap
+var RecentSegment *string
+
+var Segments *[][]structs.Segment
+var Hashmaps *[]structs.Hashmap
